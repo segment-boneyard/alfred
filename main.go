@@ -10,9 +10,9 @@ import (
 const Version = "1.0.0"
 const Usage = `
   Usage:
-    serve [--file=<f>] [--bind=<addr>]
-    serve -h | --help
-    serve --version
+    alfred [--file=<f>] [--bind=<addr>]
+    alfred -h | --help
+    alfred --version
   Options:
     --file=<f>          file to serve [default: index.html]
     --bind=<addr>       bind address  [default: 0.0.0.0:3000]
