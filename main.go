@@ -10,11 +10,12 @@ import (
 const Version = "1.0.0"
 const Usage = `
   Usage:
-    serve <file> [--bind=<addr>]
+    serve [--file=<f>] [--bind=<addr>]
     serve -h | --help
     serve --version
   Options:
-    --bind=<addr>       bind address [default: 0.0.0.0:3000]
+    --file=<f>          file to serve [default: index.html]
+    --bind=<addr>       bind address  [default: 0.0.0.0:3000]
     -h, --help          output help information
     -v, --version       output version
 `
@@ -34,7 +35,7 @@ func main() {
 	check(err)
 
 	addr := args["--bind"].(string)
-	file := args["<file>"].(string)
+	file := args["--file"].(string)
 
 	log.Println("binding to", addr)
 	log.Println("serving", file)
