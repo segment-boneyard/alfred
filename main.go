@@ -9,7 +9,7 @@ import (
 	"github.com/docopt/docopt-go"
 )
 
-const Version = "1.0.0"
+const Version = "0.1.0"
 const Usage = `
   Usage:
     alfred [--directory=<dir>] [--bind=<addr>]
