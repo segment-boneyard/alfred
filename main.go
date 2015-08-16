@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path"
 
 	"github.com/docopt/docopt-go"
 )
@@ -10,24 +12,30 @@ import (
 const Version = "1.0.0"
 const Usage = `
   Usage:
-    alfred [--file=<f>] [--bind=<addr>]
+    alfred [--directory=<dir>] [--bind=<addr>]
     alfred -h | --help
     alfred --version
   Options:
-    --file=<f>          file to serve [default: index.html]
+    --directory=<dir>   directory to serve [default: /]
     --bind=<addr>       bind address  [default: 0.0.0.0:3000]
     -h, --help          output help information
     -v, --version       output version
 `
 
-// Serves a single file to handle all incoming requests.
+// Serves a single directory to handle all incoming requests.
 type Server struct {
-	file string
+	dir string
 }
 
 // ServeHTTP implementation.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, s.file)
+	filePath := s.dir + path.Clean(r.URL.Path)
+	if _, err := os.Stat(filePath); err == nil {
+		http.ServeFile(w, r, filePath)
+		return
+	}
+
+	http.ServeFile(w, r, s.dir)
 }
 
 func main() {
@@ -35,12 +43,12 @@ func main() {
 	check(err)
 
 	addr := args["--bind"].(string)
-	file := args["--file"].(string)
+	dir := args["--directory"].(string)
 
 	log.Println("binding to", addr)
-	log.Println("serving", file)
+	log.Println("serving", dir)
 
-	check(http.ListenAndServe(addr, &Server{file}))
+	check(http.ListenAndServe(addr, &Server{dir}))
 }
 
 func check(err error) {
